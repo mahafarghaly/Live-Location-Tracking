@@ -1,0 +1,40 @@
+PODS:
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - live_location_tracking (0.0.1):
+    - Flutter
+  - location (0.0.1):
+    - Flutter
+  - sensors_plus (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - live_location_tracking (from `.symlinks/plugins/live_location_tracking/ios`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  live_location_tracking:
+    :path: ".symlinks/plugins/live_location_tracking/ios"
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  sensors_plus:
+    :path: ".symlinks/plugins/sensors_plus/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+  live_location_tracking: af7187e3ae3bbaa99c2494ea650cc8381d24dddf
+  location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
+  sensors_plus: 6a11ed0c2e1d0bd0b20b4029d3bad27d96e0c65b
+
+PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
+
+COCOAPODS: 1.16.2

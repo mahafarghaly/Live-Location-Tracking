@@ -1,15 +1,29 @@
+import 'package:hive/hive.dart';
+part 'location_point.g.dart';
+
+@HiveType(typeId: 0)
 class LocationPoint {
-  final int id;
+  @HiveField(0)
+  final int? id;
+
+  @HiveField(1)
   final double latitude;
+
+  @HiveField(2)
   final double longitude;
-  final int timestamp;
+
+  @HiveField(3)
+  final double timestamp;
+
+  @HiveField(4)
   final double speed;
 
   LocationPoint({
-    required this.id,
+    this.id,
     required this.latitude,
     required this.longitude,
     required this.timestamp,
     required this.speed,
   });
 }
+
