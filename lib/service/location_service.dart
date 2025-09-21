@@ -14,7 +14,7 @@ class LocationService with WidgetsBindingObserver{
   late final MotionTracking _motionTracking;
   LocationService(this._storage) {
     _sensorSpeedService = SensorSpeedService();
-    _motionTracking = MotionTracking(_sensorSpeedService);
+    _motionTracking = MotionTracking();
     WidgetsBinding.instance.addObserver(this);
   }
   //
@@ -107,7 +107,7 @@ class LocationService with WidgetsBindingObserver{
           final userState = _motionTracking.handleStateLogic(
             lastLocation: storedLocation,
             locationData: locationData,
-            speedKM: speedKM,
+            //speedKM: speedKM,
           );
           print("😡 userState $userState");
         } else {
