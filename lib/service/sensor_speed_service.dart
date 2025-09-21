@@ -30,7 +30,7 @@ class SensorSpeedService {
     },
       onError: (error){
       /// TODO Toast message
-        //Needed for Android in case sensor is not available
+        print(" sensor is not available");
       },
       cancelOnError: true,
     );

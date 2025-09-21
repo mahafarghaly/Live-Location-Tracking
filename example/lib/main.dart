@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_location_tracking/data/local_storage.dart';
+import 'package:live_location_tracking/live_location_tracking.dart';
 import 'package:live_location_tracking/models/location_point.dart';
-import 'package:live_location_tracking/service/location_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,12 +10,12 @@ void main()async {
   Hive.registerAdapter(LocationPointAdapter());
   final box = await Hive.openBox<LocationPoint>('location_points');
   final storage = LocationStorage(box);
-  final locationService = LocationService(storage);
+  final locationService = LiveLocationTracking(storage);
   runApp(MyApp(locationService: locationService,));
 }
 
 class MyApp extends StatefulWidget {
-  final LocationService locationService;
+  final LiveLocationTracking locationService;
   const MyApp({super.key, required this.locationService});
 
   @override

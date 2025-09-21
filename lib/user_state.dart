@@ -1,7 +1,7 @@
 enum UserState {
   idle,
   start,
-  resume,
+ // resume,
   end,
   lostConnection,
 }
