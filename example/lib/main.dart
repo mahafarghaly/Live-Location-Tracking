@@ -23,13 +23,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   void initState() {
     super.initState();
     widget.locationService.init();
   }
-
-
+@override
+  void dispose() {
+    super.dispose();
+    widget.locationService.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

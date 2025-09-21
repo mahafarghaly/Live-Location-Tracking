@@ -13,9 +13,8 @@ class SensorSpeedService {
 
   double get currentSpeed => _currentSpeed;
 
-  void start() {
+  Future<void> start() async {
     _lastUpdateTime = DateTime.now();
-
     _accelSubscription = userAccelerometerEvents.listen((event) {
       final now = DateTime.now();
       final dt = now.difference(_lastUpdateTime!).inMilliseconds / 1000.0;
@@ -25,14 +24,20 @@ class SensorSpeedService {
       );
       //if (accMagnitude.abs() < 0.1) accMagnitude = 0.0;
       _currentSpeed += accMagnitude * dt;
-     // if (_currentSpeed < 0) _currentSpeed = 0.0;
+      if (_currentSpeed < 0) _currentSpeed = 0.0;
       _speedController.add(_currentSpeed);
-    });
+    //  print("currentspeed::$_currentSpeed , accMagnitude :$accMagnitude , time$dt");
+    },
+      onError: (error){
+      /// TODO Toast message
+        //Needed for Android in case sensor is not available
+      },
+      cancelOnError: true,
+    );
   }
 
   void stop() {
     _accelSubscription?.cancel();
-    //  _speedController.close();
-    //  _accelSubscription = null;
+    _speedController.close();
   }
 }

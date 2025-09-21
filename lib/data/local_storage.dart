@@ -27,6 +27,7 @@ class LocationStorage {
     return _box.get("current_point");
   }
 
+
   Future<void> clearAll() async {
     await _box.clear();
   }
