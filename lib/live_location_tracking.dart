@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:live_location_tracking/motion_tracker.dart';
+import 'package:live_location_tracking/service/motion_tracker.dart';
 import 'package:live_location_tracking/service/sensor_speed_service.dart';
 import 'package:location/location.dart';
 
-import 'data/local_storage.dart';
-import 'user_state.dart';
+
+import 'data/datasource/local_datasource/local_storage.dart';
+import 'core/user_state.dart';
 
 class LiveLocationTracking with WidgetsBindingObserver{
   final LocationStorage _storage;

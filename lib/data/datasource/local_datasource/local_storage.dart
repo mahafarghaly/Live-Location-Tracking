@@ -1,6 +1,8 @@
 import 'package:hive/hive.dart';
-import 'package:live_location_tracking/models/location_point.dart';
+
 import 'package:location/location.dart';
+
+import '../../models/location_point.dart';
 
 class LocationStorage {
   final Box<LocationPoint> _box;

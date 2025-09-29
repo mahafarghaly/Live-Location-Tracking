@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:live_location_tracking/data/local_storage.dart';
+import 'package:live_location_tracking/data/datasource/local_datasource/local_storage.dart';
+import 'package:live_location_tracking/data/models/location_point.dart';
 import 'package:live_location_tracking/live_location_tracking.dart';
-import 'package:live_location_tracking/models/location_point.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();

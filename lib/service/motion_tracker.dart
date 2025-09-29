@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:live_location_tracking/service/sensor_speed_service.dart';
-import 'package:live_location_tracking/user_state.dart';
+import 'package:live_location_tracking/core/user_state.dart';
 import 'package:location/location.dart';
-import 'models/location_point.dart';
+
+import '../data/models/location_point.dart';
+
 
 // class MotionTracking {
 //   Timer? _idleTimer;
