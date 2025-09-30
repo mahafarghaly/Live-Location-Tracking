@@ -17,7 +17,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {
     final box = await Hive.openBox<LocationPoint>('location_points');
-    final storage = LocationStorage(box);
+    final tripBox = await Hive.openBox('trip_points');
+    final storage = LocationStorage(box,tripBox);
     final locationService = LiveLocationTracking(storage);
     await tester.pumpWidget(MyApp(locationService: locationService));
 
