@@ -39,9 +39,17 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final trips = widget.locationService.allTrips;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
+          actions: [
+            IconButton(onPressed: (){
+              setState(() {
+
+              });
+            }, icon: Icon(Icons.refresh))
+          ],
         ),
         body: Padding(
       padding: const EdgeInsets.all(20.0),
