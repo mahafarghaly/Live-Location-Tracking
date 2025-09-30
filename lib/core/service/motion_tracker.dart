@@ -197,10 +197,8 @@ class MotionTracking {
   }
   Future<void> storeTrip() async {
     if (_tripPoints.isEmpty) return;
-
-    print("###Trip ended with ${_tripPoints.length} points");
-    _allTrips.add(List<LatLng>.from(_tripPoints));
     await locationStorage.saveTrip(_tripPoints);
+    _allTrips.add(locationStorage.getLastTrip());
     print("🤩🤩🤩🤩🤩get stored Trip${locationStorage.getLastTrip()}");
     print("###All trips:${allTrips.length}");
     _tripPoints.clear();
