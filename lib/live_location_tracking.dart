@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:live_location_tracking/motion_tracker.dart';
-import 'package:live_location_tracking/service/sensor_speed_service.dart';
 import 'package:location/location.dart';
-
-import 'data/local_storage.dart';
-import 'user_state.dart';
-
+import 'core/service/motion_tracker.dart';
+import 'core/service/sensor_speed_service.dart';
+import 'data/datasource/local_datasource/local_storage.dart';
+import 'core/utils/user_state.dart';
 class LiveLocationTracking with WidgetsBindingObserver{
   final LocationStorage _storage;
   final Location _location = Location();
@@ -14,7 +12,7 @@ class LiveLocationTracking with WidgetsBindingObserver{
   late final MotionTracking _motionTracking;
   LiveLocationTracking(this._storage) {
     _sensorSpeedService = SensorSpeedService();
-    _motionTracking = MotionTracking();
+    _motionTracking = MotionTracking(_storage);
     WidgetsBinding.instance.addObserver(this);
   }
   @override
@@ -95,13 +93,13 @@ class LiveLocationTracking with WidgetsBindingObserver{
         await _sensorSpeedService.start();
 
         final speedKM = _sensorSpeedService.currentSpeed * 3.6;
-        final storedLocation =await _storage.getCurrentPoint();
+        final storedLocation = _storage.getCurrentPoint();
       await _storage.saveLocationPoint(
           locationData: locationData,
           speedKM: speedKM.toStringAsFixed(2),
         );
         print("📍current Location: ${locationData.latitude}, ${locationData.longitude}, Speed: ${speedKM.toStringAsFixed(2)} km/h");
-      //  print("###storedLocation Location: ${storedLocation?.latitude}, ${storedLocation?.longitude}, Speed: ${storedLocation?.speed.toStringAsFixed(2)} km/h");
+       print("###storedLocation Location: ${storedLocation?.latitude}, ${storedLocation?.longitude}, Speed: ${storedLocation?.speed.toStringAsFixed(2)} km/h");
         if (storedLocation != null) {
           final userState = _motionTracking.handleStateLogic(
             lastLocation: storedLocation,
@@ -118,6 +116,7 @@ class LiveLocationTracking with WidgetsBindingObserver{
       }
     });
   }
+  List<List<Map<String,dynamic>>> get allTrips => _motionTracking.allTrips;
   void dispose() {
     _motionTracking.cancelTimers();
     _sensorSpeedService.stop();

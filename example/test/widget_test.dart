@@ -7,13 +7,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_location_tracking/data/datasource/local_datasource/local_storage.dart';
+import 'package:live_location_tracking/data/models/location_point.dart';
+
+import 'package:live_location_tracking/live_location_tracking.dart';
 
 import 'package:live_location_tracking_example/main.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final box = await Hive.openBox<LocationPoint>('location_points');
+    final tripBox = await Hive.openBox('trip_points');
+    final storage = LocationStorage(box,tripBox);
+    final locationService = LiveLocationTracking(storage);
+    await tester.pumpWidget(MyApp(locationService: locationService));
 
     // Verify that platform version is retrieved.
     expect(
