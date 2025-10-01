@@ -5,7 +5,6 @@ import 'core/service/motion_tracker.dart';
 import 'core/service/sensor_speed_service.dart';
 import 'data/datasource/local_datasource/local_storage.dart';
 import 'core/utils/user_state.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 class LiveLocationTracking with WidgetsBindingObserver{
   final LocationStorage _storage;
   final Location _location = Location();
@@ -117,7 +116,7 @@ class LiveLocationTracking with WidgetsBindingObserver{
       }
     });
   }
-  List<List<LatLng>> get allTrips => _motionTracking.allTrips;
+  List<List<Map<String,dynamic>>> get allTrips => _motionTracking.allTrips;
   void dispose() {
     _motionTracking.cancelTimers();
     _sensorSpeedService.stop();

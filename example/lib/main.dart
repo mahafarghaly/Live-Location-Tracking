@@ -4,6 +4,7 @@ import 'package:live_location_tracking/data/models/location_point.dart';
 import 'package:live_location_tracking/live_location_tracking.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:live_location_tracking_example/map_display.dart';
+import 'package:live_map_tracking/live_map_tracking.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -59,9 +60,10 @@ class _MyAppState extends State<MyApp> {
         itemCount: trips.length,
         itemBuilder: (context, index) {
           final trip = trips[index];
+          final tripPoints = trip.map((map) => TripPoint.fromMap(map)).toList();
           return InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>MapDisplay(tripPoints: trip)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>MapDisplay(tripPoints: tripPoints)));
             },
             child: Card(
               child: Padding(
@@ -77,9 +79,9 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text("Points: ${trip.length}"),
-                    Text("Start: ${trip.first.latitude}, ${trip.first.longitude}"),
-                    Text("End: ${trip.last.latitude}, ${trip.last.longitude}"),
+                    Text("Points: ${tripPoints.length}"),
+                    Text("Start: ${tripPoints.first.lat}, ${tripPoints.first.lng}"),
+                    Text("End: ${tripPoints.last.lat}, ${tripPoints.last.lng}"),
                   ],
                 ),
               ),

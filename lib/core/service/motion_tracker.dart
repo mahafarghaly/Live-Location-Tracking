@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:live_location_tracking/core/utils/user_state.dart';
 import 'package:location/location.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../data/datasource/local_datasource/local_storage.dart';
 import '../../data/models/location_point.dart';
 
@@ -109,8 +108,8 @@ class MotionTracking {
   Timer? _idleTimer;
   Timer? _endTimer;
   UserState _currentState = UserState.idle;
-  final List<LatLng> _tripPoints = [];
-  final List<List<LatLng>> _allTrips = [];
+  final List<Map<String, dynamic>>  _tripPoints = [];
+  final List<List<Map<String, dynamic>>> _allTrips = [];
   MotionTracking(this.locationStorage);
 
   UserState handleStateLogic({
@@ -123,7 +122,10 @@ class MotionTracking {
       return setState(UserState.lostConnection);
     }
     if (_currentState == UserState.start) {
-      _tripPoints.add(LatLng(locationData.latitude!, locationData.longitude!));
+      _tripPoints.add({
+        "lat": locationData.latitude!,
+        "lng": locationData.longitude!,
+      });
     }
     final distanceMoved = calculateDistance(
       lastLocation.latitude,
@@ -204,7 +206,7 @@ class MotionTracking {
     _tripPoints.clear();
   }
 
-  List<List<LatLng>> get allTrips => _allTrips;
+  List<List<Map<String,dynamic>>> get allTrips => _allTrips;
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const earthRadius = 6371000;
     final dLat = _degToRad(lat2 - lat1);

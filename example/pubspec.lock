@@ -275,7 +275,7 @@ packages:
     description:
       path: "."
       ref: dev
-      resolved-ref: "204307c5eb09cdd08b05d8dc6d8b8674a3e6fd53"
+      resolved-ref: ffa71f4236957f9b7db0308ba3e6cd82966e6ec3
       url: "https://github.com/mahafarghaly/live_map_tracking.git"
     source: git
     version: "0.0.1"
