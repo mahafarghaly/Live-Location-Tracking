@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:live_location_tracking/data/local_storage.dart';
+import 'package:live_location_tracking/data/datasource/local_datasource/local_storage.dart';
+import 'package:live_location_tracking/data/models/location_point.dart';
 import 'package:live_location_tracking/live_location_tracking.dart';
-import 'package:live_location_tracking/models/location_point.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:live_location_tracking_example/map_display.dart';
+import 'package:live_map_tracking/live_map_tracking.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Hive.initFlutter();
   Hive.registerAdapter(LocationPointAdapter());
   final box = await Hive.openBox<LocationPoint>('location_points');
-  final storage = LocationStorage(box);
+  final tripBox = await Hive.openBox('trip_points');
+  final storage = LocationStorage(box,tripBox);
   final locationService = LiveLocationTracking(storage);
   runApp(MyApp(locationService: locationService,));
 }
@@ -36,14 +38,58 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
+    final trips = widget.locationService.allTrips;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
+          actions: [
+            IconButton(onPressed: (){
+              setState(() {
+
+              });
+            }, icon: Icon(Icons.refresh))
+          ],
         ),
-        body: Center(
-          child: Text('Running on:\n'),
-        ),
+        body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: trips.isEmpty
+          ? const Center(child: Text("No trips yet"))
+          : ListView.builder(
+        itemCount: trips.length,
+        itemBuilder: (context, index) {
+          final trip = trips[index];
+          final tripPoints = trip.map((map) => TripPoint.fromMap(map)).toList();
+          return InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>MapDisplay(tripPoints: tripPoints)));
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Trip #${index + 1}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text("Points: ${tripPoints.length}"),
+                    Text("Start: ${tripPoints.first.lat}, ${tripPoints.first.lng}"),
+                    Text("End: ${tripPoints.last.lat}, ${tripPoints.last.lng}"),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    ),
       ),
     );
   }

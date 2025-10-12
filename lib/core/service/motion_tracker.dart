@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:live_location_tracking/service/sensor_speed_service.dart';
-import 'package:live_location_tracking/user_state.dart';
+import 'package:live_location_tracking/core/utils/user_state.dart';
 import 'package:location/location.dart';
-import 'models/location_point.dart';
+import '../../data/datasource/local_datasource/local_storage.dart';
+import '../../data/models/location_point.dart';
 
 // class MotionTracking {
 //   Timer? _idleTimer;
@@ -104,11 +104,13 @@ import 'models/location_point.dart';
 //   double _degToRad(double deg) => deg * (pi / 180);
 // }
 class MotionTracking {
+  final LocationStorage locationStorage;
   Timer? _idleTimer;
   Timer? _endTimer;
   UserState _currentState = UserState.idle;
-
-  MotionTracking();
+  final List<Map<String, dynamic>>  _tripPoints = [];
+  final List<List<Map<String, dynamic>>> _allTrips = [];
+  MotionTracking(this.locationStorage);
 
   UserState handleStateLogic({
     required LocationPoint lastLocation,
@@ -119,7 +121,12 @@ class MotionTracking {
     if (locationData.latitude == null || locationData.longitude == null) {
       return setState(UserState.lostConnection);
     }
-
+    if (_currentState == UserState.start) {
+      _tripPoints.add({
+        "lat": locationData.latitude!,
+        "lng": locationData.longitude!,
+      });
+    }
     final distanceMoved = calculateDistance(
       lastLocation.latitude,
       lastLocation.longitude,
@@ -132,9 +139,6 @@ class MotionTracking {
       if (_currentState == UserState.idle || _currentState == UserState.end) {
         return setState(UserState.start);
       }
-      // else if (_currentState == UserState.start || _currentState == UserState.resume) {
-      //   return setState(UserState.resume);
-      // }
     } else {
       if (_currentState == UserState.start ) {
         return startIdleTimer(lastLocation: lastLocation, locationData: locationData);
@@ -152,12 +156,13 @@ class MotionTracking {
     print("⏳ Starting 5-min idle timer...");
     setState(UserState.idle);
 
-    _idleTimer = Timer(const Duration(minutes: 5), () {
+    _idleTimer = Timer(const Duration(seconds: 5), () {
       if (isStillIdle(lastLocation: lastLocation, locationData: locationData)) {
         print("⏳ Starting 10-min end timer...");
-        _endTimer = Timer(const Duration(minutes: 10), () {
+        _endTimer = Timer(const Duration(seconds: 10), () async {
           if (isStillIdle(lastLocation: lastLocation, locationData: locationData)) {
             setState(UserState.end);
+            await storeTrip();
           }
         });
       }
@@ -192,7 +197,16 @@ class MotionTracking {
     }
     return _currentState;
   }
+  Future<void> storeTrip() async {
+    if (_tripPoints.isEmpty) return;
+    await locationStorage.saveTrip(_tripPoints);
+    _allTrips.add(locationStorage.getLastTrip());
+    print("🤩🤩🤩🤩🤩get stored Trip${locationStorage.getLastTrip()}");
+    print("###All trips:${allTrips.length}");
+    _tripPoints.clear();
+  }
 
+  List<List<Map<String,dynamic>>> get allTrips => _allTrips;
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const earthRadius = 6371000;
     final dLat = _degToRad(lat2 - lat1);
